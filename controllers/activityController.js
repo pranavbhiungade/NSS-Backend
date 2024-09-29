@@ -1,4 +1,6 @@
-const Activity = require('../models/Activity');
+const Activity = require('../models/activitySchema');
+const User = require('../models/userSchema');
+const Admin = require('../models/adminSchema');
 
 // Controller to create a new activity
 exports.createActivity = async (req, res) => {
@@ -94,14 +96,15 @@ exports.addUserInterest = async (req, res) => {
 exports.getActivitiesByType = async (req, res) => {
     try {
         // Assuming the type is passed as a query parameter
-        const { type } = req.query;
+        const { type } = req.params;
+        const status = "Completed";
 
         if (!type) {
             return res.status(400).json({ message: 'Activity type is required' });
         }
 
         // Query the database for activities of the given type
-        const activities = await Activity.find({ Type: type });
+        const activities = await Activity.find({ Type: type,Status:status });
 
         // Return the activities
         if (activities.length === 0) {
@@ -119,9 +122,9 @@ exports.getUpcomingIncompletedActivities = async (req, res) => {
         const currentDate = new Date();
 
         // Query to find activities where the date is in the future and status is "Incompleted"
-        const upcomingActivities = await Activity.find({
-            Date: { $gt: currentDate },      // Date is greater than the current date
-            Status: 'Incompleted',           // Activity is still incompleted
+        const upcomingActivities = await Activity.find({     // Date is greater than the current date
+            
+            Status:"Incompleted",           // Activity is still incompleted
         });
 
         // Check if there are any upcoming incompleted activities

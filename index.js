@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const activityRoutes = require('./routes/activity'); // Adjust the path if necessary
+const authRoutes = require('./routes/authRoutes');
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,8 +18,10 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+app.use('/api', activityRoutes);
+app.use('/api/auth', authRoutes);
 
-mongoose.connect('mongodb://localhost/mydatabase', {
+mongoose.connect('mongodb://localhost:27017/mydatabase', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
